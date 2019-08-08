@@ -5,6 +5,6 @@ ip_adress = "192.168.2.101"
 hostname = "new_pi_host"
 
 # Validate timezone correctness against 'timedatectl list-timezones' 
-timezone = "Europe/Berlin"
+timezone = "Etc/UTC"
 
 new_user = "pi-user"

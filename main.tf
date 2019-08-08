@@ -41,7 +41,7 @@ resource "local_file" "public_key" {
 
 resource "null_resource" "init" {
   connection {
-    type = "ssh"    
+    type = "ssh"
     user = "${var.initial_user}"
     password = "${var.initial_password}"
     host = "${var.ip_adress}"

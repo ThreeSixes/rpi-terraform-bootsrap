@@ -1,6 +1,5 @@
 # Raspberry Pi Initialization with Terraform
-This is for Provisioning a Rpi2/3 with Raspian Lite. 
-I have implemented this for easily bootstrapping RPI Docker Hosts
+This is for Provisioning a Rpi2/3 with Raspian Lite.
 
 ## Current Versions
 * Raspberry Pi 3B
@@ -8,7 +7,6 @@ I have implemented this for easily bootstrapping RPI Docker Hosts
 * Raspian 2018-11-13-raspbian-stretch-lite
 * Docker 18.06.2~ce~3-0~raspbian
 * Terraform v0.11.11
-
 
 ## Requirements
 * Raspberry Pi 2 or 3
@@ -37,11 +35,11 @@ I have implemented this for easily bootstrapping RPI Docker Hosts
 * insert SD-Card in RPi
 * add network access
 * power it up
-* look in your Router & identify the IP-Adress of RPi 
+* look in your Router & identify the IP-Adress of RPi
 * write that adress down
 
 ## Terraform
-Version used: Terraform v0.11.11
+Version used: Terraform v0.12.6
 
 ### terraform.tfvars
 Create a file "terraform.tfvars" for easy adding variable defaults.
@@ -78,3 +76,6 @@ Before first use terraform modules must be initialized
    terraform destroy
 ```
 Not every single ressource has destroy abilities yet.
+
+## Credits
+* This [module](https://github.com/lachnerd/rpi-terraform-bootsrap) was originally written by Robert Lancher.
