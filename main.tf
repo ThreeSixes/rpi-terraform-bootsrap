@@ -1,5 +1,5 @@
 # Raspberry Pi Terraform Bootstrap Provisioner (Tested with Raspbian Stretch).
-# This is a run-once bootstrap Terraform provisioner for a Raspberry Pi.  
+# This is a run-once bootstrap Terraform provisioner for a Raspberry Pi.
 # Provisioners by default run only at resource creation, additional runs without cleanup may introduce problems.
 # https://www.terraform.io/docs/provisioners/index.html
 locals{
@@ -51,7 +51,7 @@ resource "null_resource" "init" {
   provisioner "remote-exec" {
     inline = [
       "echo 'creating script folders'",
-      "sudo mkdir -vp ${local.host_script_path}", 
+      "sudo mkdir -vp ${local.host_script_path}",
       "sudo mkdir -vp ${local.host_template_path}",
       "sudo chmod -R 777 /opt/terraform/",
     ]
@@ -62,10 +62,10 @@ resource "null_resource" "init" {
  * COPY
  ******************************************************************************************************/
 
-resource "null_resource" "copy" {  
+resource "null_resource" "copy" {
   depends_on = ["null_resource.init"]
   connection {
-    type = "ssh"    
+    type = "ssh"
     user = "${var.initial_user}"
     password = "${var.initial_password}"
     host = "${var.ip_adress}"
@@ -84,15 +84,15 @@ resource "null_resource" "copy" {
 
   provisioner "remote-exec" {
     inline = [
-      "echo 'copy ressources to host'",   
+      "echo 'copy ressources to host'",
     ]
   }
   provisioner "remote-exec" {
     when = "destroy"
     inline = [
       "echo 'deleting scripts and templates'",
-      "rm -fr ${local.host_script_path}",   
-      "rm -fr ${local.host_template_path}",    
+      "rm -fr ${local.host_script_path}",
+      "rm -fr ${local.host_template_path}",
     ]
   }
 }
@@ -105,14 +105,14 @@ resource "random_string" "password" {
   special = false
   min_upper = 8
   min_lower = 8
-  min_numeric = 4  
+  min_numeric = 4
 }
 
 resource "null_resource" "adduser" {
   depends_on = ["null_resource.copy", "random_string.password"]
 
   connection {
-    type = "ssh"    
+    type = "ssh"
     user = "${var.initial_user}"
     password = "${var.initial_password}"
     host = "${var.ip_adress}"
@@ -127,7 +127,7 @@ resource "null_resource" "adduser" {
   }
 
   provisioner "remote-exec" {
-    when = "destroy" 
+    when = "destroy"
     inline = [
       "sudo chmod +x ${local.host_script_path}/destroy_adduser.sh",
       "${local.host_script_path}/destroy_adduser.sh ${var.initial_user} ${var.initial_password} ${var.new_user}",
@@ -141,7 +141,7 @@ resource "null_resource" "adduser" {
 resource "null_resource" "ssh-copy-id" {
   depends_on = ["null_resource.adduser", "local_file.public_key"]
   connection {
-    type = "ssh"    
+    type = "ssh"
     user = "${var.new_user}"
     password = "${random_string.password.result}"
     host = "${var.ip_adress}"
@@ -158,7 +158,7 @@ resource "null_resource" "ssh-copy-id" {
       #create .ssh folder in /home/pi
       "mkdir -vp ~/.ssh",
       #write public key to /home/pi/.ssh/authorized_keys
-      "cat /tmp/id_rsa.pub >> ~/.ssh/authorized_keys", 
+      "cat /tmp/id_rsa.pub >> ~/.ssh/authorized_keys",
       #delete tmp file
       "sudo rm -fv /tmp/id_rsa.pub",
     ]
@@ -183,7 +183,7 @@ resource "null_resource" "hostname" {
   provisioner "remote-exec" {
     inline = [
       "sudo chmod +x ${local.host_script_path}/init_hostname.sh",
-      "sudo ${local.host_script_path}/init_hostname.sh ${var.hostname}",    
+      "sudo ${local.host_script_path}/init_hostname.sh ${var.hostname}",
     ]
   }
 
@@ -191,7 +191,7 @@ resource "null_resource" "hostname" {
     when = "destroy"
     inline = [
       "sudo chmod +x ${local.host_script_path}/destroy_hostname.sh",
-      "sudo ${local.host_script_path}/destroy_hostname.sh",    
+      "sudo ${local.host_script_path}/destroy_hostname.sh",
     ]
   }
 }
@@ -214,7 +214,7 @@ resource "null_resource" "disableswap" {
   provisioner "remote-exec" {
     inline = [
       "sudo chmod +x ${local.host_script_path}/init_disableswap.sh",
-      "sudo ${local.host_script_path}/init_disableswap.sh",    
+      "sudo ${local.host_script_path}/init_disableswap.sh",
     ]
   }
 
@@ -222,7 +222,7 @@ resource "null_resource" "disableswap" {
     when = "destroy"
     inline = [
       "sudo chmod +x ${local.host_script_path}/destroy_disableswap.sh",
-      "sudo ${local.host_script_path}/destroy_disableswap.sh",    
+      "sudo ${local.host_script_path}/destroy_disableswap.sh",
     ]
   }
 }
@@ -245,7 +245,7 @@ resource "null_resource" "timezone" {
   provisioner "remote-exec" {
     inline = [
       "sudo chmod +x ${local.host_script_path}/init_timezone.sh",
-      "sudo ${local.host_script_path}/init_timezone.sh ${var.timezone}",    
+      "sudo ${local.host_script_path}/init_timezone.sh ${var.timezone}",
     ]
   }
 
@@ -253,7 +253,7 @@ resource "null_resource" "timezone" {
     when = "destroy"
     inline = [
       "sudo chmod +x ${local.host_script_path}/destroy_timezone.sh",
-      "sudo ${local.host_script_path}/destroy_timezone.sh",    
+      "sudo ${local.host_script_path}/destroy_timezone.sh",
     ]
   }
 }
@@ -277,7 +277,7 @@ resource "null_resource" "update" {
   provisioner "remote-exec" {
     inline = [
       "sudo chmod +x ${local.host_script_path}/init_update.sh",
-      "sudo ${local.host_script_path}/init_update.sh",    
+      "sudo ${local.host_script_path}/init_update.sh",
     ]
   }
 }
@@ -300,7 +300,7 @@ resource "null_resource" "tools" {
   provisioner "remote-exec" {
     inline = [
       "sudo chmod +x ${local.host_script_path}/init_tools.sh",
-      "sudo ${local.host_script_path}/init_tools.sh",    
+      "sudo ${local.host_script_path}/init_tools.sh",
     ]
   }
 }
@@ -309,8 +309,8 @@ resource "null_resource" "tools" {
  * REBOOT
  ******************************************************************************************************/
 /*
-  Rebooting si tricky since Terraform 0.11.3
-  this is the only solution i got working for Raspian adding another 80s
+  Rebooting is tricky since Terraform 0.11.3
+  this is the only solution I got working for Raspian adding another 80s
   and 2 Ressources only for Rebooting, but without it Docker install is running in some
   Issues
   see https://github.com/hashicorp/terraform/issues/17844
@@ -342,63 +342,12 @@ resource "null_resource" "reboot" {
 
 resource "null_resource" "reboot_wait" {
   depends_on = ["null_resource.reboot"]
-  
+
   #!waits 90s - only works on Windows
   #90s was best for my setup so reboot is under 30s - but it can take longer
   #80s would even work but i added 10s for safety
   provisioner "local-exec" {
     command     = "Start-Sleep 90",
     interpreter = ["PowerShell", "-Command"]
-  }
-}
-
-/******************************************************************************************************
- * DOCKER
- ******************************************************************************************************/
-
-resource "null_resource" "docker" {
-  depends_on = ["null_resource.reboot_wait"]
-
-  connection {
-    type = "ssh"
-    private_key = "${tls_private_key.rsa_private.private_key_pem}"
-    user = "${var.new_user}"
-    host = "${var.ip_adress}"
-    timeout = "${local.ssh_timeout}"
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "sudo chmod +x ${local.host_script_path}/init_docker.sh",
-      "sudo ${local.host_script_path}/init_docker.sh ${var.new_user} ${var.docker_version}",    
-    ]
-  }
-  
-  provisioner "remote-exec" {
-    inline = [
-      "hello world",
-      "docker run arm32v5/hello-world",    
-    ]
-  }
-}
-
-#test of hello-world without sudo in new connection to work properly
-resource "null_resource" "docker_test" {
-  depends_on = ["null_resource.docker"]
-
-  connection {
-    type = "ssh"
-    private_key = "${tls_private_key.rsa_private.private_key_pem}"
-    user = "${var.new_user}"
-    host = "${var.ip_adress}"
-    timeout = "${local.ssh_timeout}"
-  }
-  
-  provisioner "remote-exec" {
-    inline = [
-      "hello world",
-      "docker run --name hello-world-container arm32v5/hello-world",
-      "docker rm hello-world-container"
-    ]
   }
 }
